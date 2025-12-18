@@ -98,51 +98,183 @@
                     }
                   }, {
                     type: 'text',
-                    text: `You are an AI extraction agent for Energy Management Solutions (EMS) platform.
+                    text: `You are an expert AI extraction agent for Energy Management Solutions (EMS) platform. Your task is to extract ALL utility bill data with maximum accuracy and completeness.
 
-Extract utility bill data into the EXACT JSON structure below. Extract data for ONE location only.
+EXTRACTION INSTRUCTIONS:
+1. Extract data for ONE location only (if multiple locations exist, extract the first one)
+2. Extract EVERY charge line item separately - do not combine or summarize
+3. Identify all addresses: service address, meter address, billing address, remit address
+4. Capture all payment methods and remittance details
+5. Extract vendor/utility company information completely
+6. Use null for missing numeric values, empty string "" for missing text values
+7. All dates must be in YYYY-MM-DD format
+8. Currency codes should be 3-letter ISO codes (USD, CAD, EUR, etc.)
 
-CRITICAL: Return ONLY valid JSON (no markdown, no explanation).
+CRITICAL FIELD DEFINITIONS:
+- BILL_AMT: Total amount payable on this bill (final amount due)
+- PREV_BILL_AMT: Previous balance or amount from last bill
+- CURR_CHARGES: Current period charges only (new charges for this billing period)
+- CURR_BAL: Current balance (may include previous balance + current charges)
+- ENTITY_NAME: The client/customer company name (who is being billed)
+- REMIT_TO_NAME: Who to make payment to (payee name)
+
+Return ONLY valid JSON in this EXACT structure (no markdown, no explanation, no preamble):
 
 {
   "ums_bill": {
     "BILL_NBR": "",
     "BILL_RCVD_DATE": "YYYY-MM-DD",
+    "ENTR_DATE": "YYYY-MM-DD",
     "INVOICE_DATE": "YYYY-MM-DD",
     "BILL_AMT": 0,
+    "CURR_BAL": 0,
     "PYMT_DUE_DATE": "YYYY-MM-DD",
+    "BILL_STAT_TYPE_NAME": "",
     "BILL_TYPE": "",
+    "LATEFEES": 0,
+    "PENAL_AMT": 0,
+    "PREV_BILL_AMT": 0,
+    "CURR_CHARGES": 0,
     "SERVICE_FROM_DATE": "YYYY-MM-DD",
     "SERVICE_TO_DATE": "YYYY-MM-DD",
     "BILLING_DAYS": 0
   },
   "ums_bill_meter_lnit": [{
     "METER_NBR": "",
+    "POINT_OF_DELIVERY": "",
+    "CONVERSION_FACTOR": 0,
     "START_READING": 0,
+    "START_READING_DATE": "YYYY-MM-DD",
+    "START_READING_TYPE": "",
     "END_READING": 0,
+    "END_READING_DATE": "YYYY-MM-DD",
+    "END_READING_TYPE": "",
+    "RAW_USAGE": 0,
+    "IMAGE_USAGE": 0,
     "CALCULATED_USAGE": 0,
-    "UOM": ""
+    "UOM": "",
+    "COMMODITY_TYPE": "",
+    "SERVICE_TYPE": "",
+    "RATE_CLASS": ""
   }],
   "ums_bill_charge": [{
     "CHARGE_TYPE": "",
+    "CHARGE_CATEGORY": "",
     "CT_ITEM_DESC": "",
+    "CHARGE_DESCRIPTION": "",
+    "QUANTITY": 0,
+    "RATE": 0,
+    "UNIT": "",
+    "IMAGE_AMOUNT": 0,
     "AMOUNT": 0,
-    "CURRENCY": ""
+    "CURRENCY": "",
+    "NOTES": ""
   }],
   "account_details": {
     "ACCT_NBR": "",
-    "ACCT_NAME": ""
+    "ACCT_NAME": "",
+    "ENTITY_NAME": "",
+    "CUSTOMER_NAME": "",
+    "CUSTOMER_TYPE": "",
+    "BLNG_CYCL_TYPE_NAME": ""
   },
   "site_details": {
+    "SITE_NBR": "",
+    "SITE_NAME": "",
     "SERVICE_ADDRESS": {
+      "STREET": "",
+      "CITY": "",
+      "PROVINCE": "",
+      "POSTAL_CODE": "",
+      "COUNTRY": "",
       "FULL_ADDRESS": ""
-    }
+    },
+    "METER_ADDRESS": {
+      "STREET": "",
+      "CITY": "",
+      "PROVINCE": "",
+      "POSTAL_CODE": "",
+      "COUNTRY": "",
+      "FULL_ADDRESS": ""
+    },
+    "ACCOUNT_ADDRESS": {
+      "NAME": "",
+      "STREET": "",
+      "CITY": "",
+      "PROVINCE": "",
+      "POSTAL_CODE": "",
+      "COUNTRY": ""
+    },
+    "ACTIVE_FLAG": ""
   },
   "vendor_details": {
     "ORG_NAME": "",
-    "VENDOR_PHONE": ""
+    "VENDOR_LEGAL_NAME": "",
+    "TRADING_AS": "",
+    "TAX_ID": "",
+    "GST_NUMBER": "",
+    "VENDOR_ADDRESS": {
+      "STREET": "",
+      "CITY": "",
+      "PROVINCE": "",
+      "POSTAL_CODE": "",
+      "COUNTRY": ""
+    },
+    "VENDOR_PHONE": "",
+    "VENDOR_PHONE_HOURS": "",
+    "VENDOR_WEBSITE": "",
+    "VENDOR_EMAIL": "",
+    "CUSTOMER_CARE_NUMBER": "",
+    "EMERGENCY_NUMBER": "",
+    "POINT_OF_CONTACT": {
+      "DEPARTMENT": "",
+      "PHONE": "",
+      "EMAIL": ""
+    }
+  },
+  "remit_details": {
+    "REMIT_TO_NAME": "",
+    "REMIT_ADDRESS": {
+      "STREET": "",
+      "CITY": "",
+      "PROVINCE": "",
+      "POSTAL_CODE": "",
+      "COUNTRY": ""
+    },
+    "PAYMENT_METHODS": [],
+    "BANK_DETAILS": {
+      "BANK_NAME": "",
+      "ACCOUNT_NUMBER": "",
+      "ROUTING_NUMBER": "",
+      "SWIFT_CODE": "",
+      "IBAN": ""
+    },
+    "PAYMENT_INSTRUCTIONS": ""
+  },
+  "additional_references": {
+    "TRANSIT_NUMBER": "",
+    "REFERENCE_NUMBER": "",
+    "METER_IDENTIFIER": "",
+    "LOCATION_CODE": "",
+    "CONTRACT_NUMBER": "",
+    "PO_NUMBER": "",
+    "PAGE_NUMBERS": []
+  },
+  "usage_comparison": {
+    "CURRENT_USAGE": 0,
+    "PREVIOUS_BILL_USAGE": 0,
+    "LAST_YEAR_USAGE": 0,
+    "CHANGE_VS_PREVIOUS": 0,
+    "CHANGE_VS_LAST_YEAR": 0,
+    "UOM": ""
   },
   "totals": {
+    "TOTAL_GAS_CHARGES": 0,
+    "TOTAL_ELECTRICITY_CHARGES": 0,
+    "TOTAL_WATER_CHARGES": 0,
+    "TOTAL_DELIVERY_CHARGES": 0,
+    "TOTAL_SUPPLY_CHARGES": 0,
+    "TOTAL_TAXES": 0,
     "TOTAL_AMOUNT": 0,
     "CURRENCY": ""
   }
@@ -174,7 +306,9 @@ CRITICAL: Return ONLY valid JSON (no markdown, no explanation).
             meterCount: parsed.ums_bill_meter_lnit?.length || 0,
             chargeCount: parsed.ums_bill_charge?.length || 0,
             totalAmount: parsed.totals?.TOTAL_AMOUNT || 0,
-            currency: parsed.totals?.CURRENCY || 'N/A'
+            currency: parsed.totals?.CURRENCY || 'N/A',
+            entityName: parsed.account_details?.ENTITY_NAME || 'N/A',
+            billNumber: parsed.ums_bill?.BILL_NBR || 'N/A'
           };
 
           setExtractionStats(stats);
@@ -214,22 +348,42 @@ CRITICAL: Return ONLY valid JSON (no markdown, no explanation).
                 </div>
                 <div>
                   <h1 className="text-3xl font-bold text-gray-900">Utility Bill AI Extractor</h1>
-                  <p className="text-gray-600">EMS Schema-Aligned</p>
+                  <p className="text-gray-600">EMS Schema-Aligned • Enhanced Extraction</p>
                 </div>
               </div>
 
               {!apiKeyValid && (
                 <div className="mb-8 p-6 bg-blue-50 border-2 border-indigo-200 rounded-xl">
-                  <h3 className="text-lg font-semibold mb-2">Enter Your Anthropic API Key</h3>
-                  <input
-                    type={showApiKey ? 'text' : 'password'}
-                    value={apiKey}
-                    onChange={handleApiKeyChange}
-                    placeholder="sk-ant-api03-..."
-                    className="w-full px-4 py-3 border-2 border-indigo-300 rounded-lg font-mono text-sm"
-                  />
+                  <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
+                    <i data-lucide="key" className="w-5 h-5"></i>
+                    Enter Your Anthropic API Key
+                  </h3>
+                  <div className="flex gap-2 items-center">
+                    <input
+                      type={showApiKey ? 'text' : 'password'}
+                      value={apiKey}
+                      onChange={handleApiKeyChange}
+                      placeholder="sk-ant-api03-..."
+                      className="flex-1 px-4 py-3 border-2 border-indigo-300 rounded-lg font-mono text-sm focus:outline-none focus:border-indigo-500"
+                    />
+                    <button
+                      onClick={() => setShowApiKey(!showApiKey)}
+                      className="px-4 py-3 bg-gray-100 rounded-lg hover:bg-gray-200"
+                    >
+                      <i data-lucide={showApiKey ? "eye-off" : "eye"} className="w-5 h-5"></i>
+                    </button>
+                  </div>
                   {apiKey && !apiKeyValid && (
-                    <p className="mt-2 text-sm text-red-600">Invalid API key format</p>
+                    <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                      <i data-lucide="alert-circle" className="w-4 h-4"></i>
+                      Invalid API key format
+                    </p>
+                  )}
+                  {apiKeyValid && (
+                    <p className="mt-2 text-sm text-green-600 flex items-center gap-1">
+                      <i data-lucide="check-circle" className="w-4 h-4"></i>
+                      Valid API key
+                    </p>
                   )}
                 </div>
               )}
@@ -237,48 +391,128 @@ CRITICAL: Return ONLY valid JSON (no markdown, no explanation).
               {apiKeyValid && !jsonOutput && (
                 <div className="mb-8">
                   <label className="block">
-                    <div className="border-2 border-dashed border-indigo-300 rounded-xl p-12 text-center hover:border-indigo-500 cursor-pointer">
+                    <div className="border-2 border-dashed border-indigo-300 rounded-xl p-12 text-center hover:border-indigo-500 hover:bg-indigo-50 cursor-pointer transition-all">
                       <i data-lucide="upload" className="mx-auto mb-4 text-indigo-600 w-12 h-12"></i>
-                      <p className="text-lg font-semibold">{file ? file.name : 'Upload PDF'}</p>
-                      <input type="file" accept=".pdf" onChange={handleFileUpload} className="hidden" />
+                      <p className="text-lg font-semibold text-gray-700">
+                        {file ? file.name : 'Click to Upload Utility Bill PDF'}
+                      </p>
+                      <p className="text-sm text-gray-500 mt-2">PDF files only • Max 50MB</p>
+                      <input 
+                        type="file" 
+                        accept=".pdf" 
+                        onChange={handleFileUpload} 
+                        className="hidden" 
+                      />
                     </div>
                   </label>
                 </div>
               )}
 
               {processing && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-                  <p className="font-semibold text-blue-900">Processing...</p>
+                <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="animate-spin">
+                      <i data-lucide="loader" className="w-6 h-6 text-blue-600"></i>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-blue-900">Processing your bill...</p>
+                      <p className="text-sm text-blue-700">AI is extracting all fields with maximum accuracy</p>
+                    </div>
+                  </div>
                 </div>
               )}
 
               {error && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
-                  <p className="font-semibold text-red-900">Error: {error}</p>
+                <div className="bg-red-50 border-2 border-red-200 rounded-xl p-6 mb-6">
+                  <div className="flex items-start gap-3">
+                    <i data-lucide="alert-triangle" className="w-6 h-6 text-red-600 flex-shrink-0"></i>
+                    <div>
+                      <p className="font-semibold text-red-900">Error</p>
+                      <p className="text-sm text-red-700">{error}</p>
+                    </div>
+                  </div>
                 </div>
               )}
 
-              {jsonOutput && (
+              {jsonOutput && extractionStats && (
                 <div className="space-y-6">
-                  <div className="flex justify-between">
-                    <h2 className="text-2xl font-bold">Extraction Complete</h2>
+                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-6">
+                    <h2 className="text-2xl font-bold text-green-900 mb-4 flex items-center gap-2">
+                      <i data-lucide="check-circle" className="w-6 h-6"></i>
+                      Extraction Complete
+                    </h2>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                      <div className="bg-white p-3 rounded-lg">
+                        <p className="text-gray-600">Entity</p>
+                        <p className="font-semibold text-gray-900">{extractionStats.entityName}</p>
+                      </div>
+                      <div className="bg-white p-3 rounded-lg">
+                        <p className="text-gray-600">Bill Number</p>
+                        <p className="font-semibold text-gray-900">{extractionStats.billNumber}</p>
+                      </div>
+                      <div className="bg-white p-3 rounded-lg">
+                        <p className="text-gray-600">Total Amount</p>
+                        <p className="font-semibold text-gray-900">
+                          {extractionStats.currency} {extractionStats.totalAmount}
+                        </p>
+                      </div>
+                      <div className="bg-white p-3 rounded-lg">
+                        <p className="text-gray-600">Meters</p>
+                        <p className="font-semibold text-gray-900">{extractionStats.meterCount}</p>
+                      </div>
+                      <div className="bg-white p-3 rounded-lg">
+                        <p className="text-gray-600">Charge Items</p>
+                        <p className="font-semibold text-gray-900">{extractionStats.chargeCount}</p>
+                      </div>
+                      <div className="bg-white p-3 rounded-lg">
+                        <p className="text-gray-600">Currency</p>
+                        <p className="font-semibold text-gray-900">{extractionStats.currency}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-xl font-bold text-gray-900">Extracted JSON Data</h3>
                     <div className="flex gap-3">
-                      <button onClick={handleCopy} className="bg-gray-600 text-white px-4 py-2 rounded-lg">
-                        {copied ? 'Copied!' : 'Copy'}
+                      <button 
+                        onClick={handleCopy} 
+                        className="flex items-center gap-2 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+                      >
+                        <i data-lucide={copied ? "check" : "copy"} className="w-4 h-4"></i>
+                        {copied ? 'Copied!' : 'Copy JSON'}
                       </button>
-                      <button onClick={handleDownload} className="bg-indigo-600 text-white px-4 py-2 rounded-lg">
+                      <button 
+                        onClick={handleDownload} 
+                        className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+                      >
+                        <i data-lucide="download" className="w-4 h-4"></i>
                         Download
                       </button>
                     </div>
                   </div>
-                  <pre className="bg-gray-900 text-green-400 p-6 rounded-lg overflow-auto max-h-96 text-sm">
+
+                  <pre className="bg-gray-900 text-green-400 p-6 rounded-xl overflow-auto max-h-96 text-sm font-mono border-2 border-gray-700">
                     {jsonOutput}
                   </pre>
-                  <button onClick={() => { setFile(null); setJsonOutput(null); }} className="w-full bg-gray-100 px-6 py-3 rounded-lg">
+
+                  <button 
+                    onClick={() => { 
+                      setFile(null); 
+                      setJsonOutput(null); 
+                      setExtractionStats(null);
+                      setError(null);
+                    }} 
+                    className="w-full bg-gradient-to-r from-indigo-100 to-purple-100 text-indigo-700 px-6 py-3 rounded-lg font-semibold hover:from-indigo-200 hover:to-purple-200 transition-all flex items-center justify-center gap-2"
+                  >
+                    <i data-lucide="file-plus" className="w-5 h-5"></i>
                     Extract Another Bill
                   </button>
                 </div>
               )}
+            </div>
+
+            <div className="mt-6 text-center text-sm text-gray-600">
+              <p>Powered by Claude Sonnet 4 • EMS Platform Integration</p>
             </div>
           </div>
         </div>

@@ -117,6 +117,12 @@ CRITICAL FIELD DEFINITIONS:
 - CURR_BAL: Current balance (may include previous balance + current charges)
 - ENTITY_NAME: The client/customer company name (who is being billed)
 - REMIT_TO_NAME: Who to make payment to (payee name)
+- ACCOUNT_ADDRESS: Shall be the same as meter address
+- Bill_Nbr: Shall be the invoice number or bill number mentioned on the invoice, if not found it should be null
+- Utility_type_name: shall be the utility provided for example Electricity, Natural Gas, Water, Sewer, Trash, Storm Water, Fuel Oil, Petrol, Gasoline etc
+- IMage_UOM: shall be the original UOM the bill came through
+- Billing_Address: shall be the location at which bill has been sent
+
 
 Return ONLY valid JSON in this EXACT structure (no markdown, no explanation, no preamble):
 
@@ -141,6 +147,7 @@ Return ONLY valid JSON in this EXACT structure (no markdown, no explanation, no 
   },
   "ums_bill_meter_lnit": [{
     "METER_NBR": "",
+    "Utility_Type_Name: "",
     "POINT_OF_DELIVERY": "",
     "CONVERSION_FACTOR": 0,
     "START_READING": 0,
@@ -152,7 +159,7 @@ Return ONLY valid JSON in this EXACT structure (no markdown, no explanation, no 
     "RAW_USAGE": 0,
     "IMAGE_USAGE": 0,
     "CALCULATED_USAGE": 0,
-    "UOM": "",
+    "Image_UOM": "",
     "COMMODITY_TYPE": "",
     "SERVICE_TYPE": "",
     "RATE_CLASS": ""
@@ -162,6 +169,7 @@ Return ONLY valid JSON in this EXACT structure (no markdown, no explanation, no 
     "CHARGE_CATEGORY": "",
     "CT_ITEM_DESC": "",
     "CHARGE_DESCRIPTION": "",
+    "Utility_Type_Name: "",
     "QUANTITY": 0,
     "RATE": 0,
     "UNIT": "",
@@ -198,6 +206,14 @@ Return ONLY valid JSON in this EXACT structure (no markdown, no explanation, no 
       "FULL_ADDRESS": ""
     },
     "ACCOUNT_ADDRESS": {
+      "NAME": "",
+      "STREET": "",
+      "CITY": "",
+      "PROVINCE": "",
+      "POSTAL_CODE": "",
+      "COUNTRY": ""
+    },
+    "BILLING_ADDRESS": {
       "NAME": "",
       "STREET": "",
       "CITY": "",
